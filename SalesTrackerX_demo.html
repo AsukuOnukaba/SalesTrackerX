@@ -1,0 +1,1077 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .demo-wrap {
+    background: #0d1b2a;
+    width: 100%;
+    min-height: 520px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .slide { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; animation: fadeIn 0.6s ease; }
+  .slide.active { display: flex; flex-direction: column; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---- NAVBAR ---- */
+  .nav-bar {
+    background: #0d1b2a;
+    border-bottom: 1px solid #1e3347;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 8px; }
+  .logo-box { width: 24px; height: 24px; background: #1e8c73; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+  .logo-box span { color: #fff; font-weight: 700; font-size: 12px; font-family: 'Space Grotesk', sans-serif; }
+  .logo-name { color: #e0f7f1; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.3px; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-btn { background: #1a2f45; border: 1px solid #2a4a65; color: #8bacc4; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; }
+  .nav-avatar { width: 26px; height: 26px; border-radius: 50%; background: #1e8c73; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 600; }
+  .notif { position: relative; }
+  .notif-dot { position: absolute; top: -3px; right: -3px; width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; font-size: 7px; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* ---- SIDEBAR ---- */
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+  .sidebar {
+    width: 170px;
+    background: #0d1b2a;
+    border-right: 1px solid #1e3347;
+    padding: 12px 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-new-btn {
+    margin: 0 10px 14px;
+    background: #1e8c73;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sb-section { color: #3d6178; font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 0 12px 5px; margin-top: 6px; }
+  .sb-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px; color: #7a9ab5; font-size: 11px; cursor: pointer;
+    border-radius: 5px; margin: 0 5px;
+  }
+  .sb-item.active { background: #1a3a52; color: #4ecdc4; }
+  .sb-item svg { width: 13px; height: 13px; fill: currentColor; opacity: 0.7; }
+  .sb-divider { height: 1px; background: #1e3347; margin: 8px 10px; }
+  .sb-sector { padding: 5px 12px; color: #3d6178; font-size: 10px; cursor: pointer; }
+  .sb-sector:hover { color: #6a8fa8; }
+
+  /* ---- MAIN CONTENT ---- */
+  .main-content {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #0f2335;
+    position: relative;
+  }
+
+  /* ---- CALLOUT BOX ---- */
+  .callout {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a2540;
+    border: 1px solid #1e8c73;
+    border-radius: 10px;
+    padding: 10px 18px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    z-index: 100;
+    animation: calloutIn 0.5s ease 0.8s both;
+  }
+  @keyframes calloutIn { from { opacity: 0; transform: translateX(-50%) translateY(12px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  .callout-title { color: #4ecdc4; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .callout-text { color: #c8dde8; font-size: 12px; line-height: 1.5; }
+  .callout-arrow { color: #4ecdc4; font-size: 10px; margin-right: 4px; }
+
+  /* ---- KPI CARDS ---- */
+  .kpi-header { margin-bottom: 14px; }
+  .kpi-greeting { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #e8f4f8; }
+  .kpi-sub { color: #4a7a95; font-size: 11px; margin-top: 2px; }
+  .kpi-label { color: #3d8fa8; font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+  .kpi-card {
+    background: #122b40;
+    border: 1px solid #1e3a52;
+    border-radius: 10px;
+    padding: 12px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .kpi-card.blue::before { background: #4a9fd4; }
+  .kpi-card.teal::before { background: #1e8c73; }
+  .kpi-card.amber::before { background: #e8a838; }
+  .kpi-card.pink::before { background: #e85494; }
+  .kpi-card.purple::before { background: #8b5cf6; }
+  .kpi-card-label { color: #4a7a95; font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .kpi-card-val { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; }
+  .kpi-card.blue .kpi-card-val { color: #4a9fd4; }
+  .kpi-card.teal .kpi-card-val { color: #1e8c73; }
+  .kpi-card.amber .kpi-card-val { color: #e8a838; }
+  .kpi-card.pink .kpi-card-val { color: #e85494; }
+  .kpi-card.purple .kpi-card-val { color: #8b5cf6; }
+  .kpi-card-sub { color: #3d6178; font-size: 9px; margin-top: 3px; }
+  .kpi-badge { position: absolute; top: 10px; right: 10px; background: #1a3a1a; color: #2ecc71; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+  .kpi-grid2 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .kpi-card2 { background: #122b40; border: 1px solid #1e3a52; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .kpi2-label { color: #4a7a95; font-size: 9px; margin-bottom: 4px; }
+  .kpi2-val { color: #c8dde8; font-size: 13px; font-weight: 600; }
+  .kpi2-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+
+  /* ---- PIPELINE ---- */
+  .section-title { font-family: 'Space Grotesk', sans-serif; color: #3d8fa8; font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid #1e3347; padding-bottom: 6px; }
+  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filter-pill { background: #122b40; border: 1px solid #1e3a52; color: #8bacc4; border-radius: 20px; padding: 4px 10px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+  .pipeline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pipeline-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; }
+  .pipeline-card-title { color: #c8dde8; font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .pipeline-card-sub { color: #4a7a95; font-size: 9px; margin-bottom: 12px; }
+  .funnel-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .funnel-label { color: #8bacc4; font-size: 10px; width: 72px; flex-shrink: 0; }
+  .funnel-bar-wrap { flex: 1; background: #0d1b2a; border-radius: 3px; height: 18px; overflow: hidden; }
+  .funnel-bar { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.85); white-space: nowrap; }
+  .funnel-count { color: #8bacc4; font-size: 10px; width: 24px; text-align: right; }
+  .donut-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .donut-legend { font-size: 9px; color: #6a8fa8; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+  .legend-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 3px; vertical-align: middle; }
+
+  /* Bar chart */
+  .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 120px; padding-top: 10px; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .bar-rect { width: 100%; background: #1e8c73; border-radius: 4px 4px 0 0; position: relative; }
+  .bar-label { color: #4a7a95; font-size: 9px; margin-top: 5px; text-align: center; }
+  .bar-val { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); color: #c8dde8; font-size: 9px; font-weight: 600; white-space: nowrap; }
+
+  /* ---- ANALYTICS ---- */
+  .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .an-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; }
+  .an-card-title { color: #c8dde8; font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .an-card-sub { color: #4a7a95; font-size: 9px; margin-bottom: 10px; }
+  .hbar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .hbar-label { color: #8bacc4; font-size: 9px; width: 55px; flex-shrink: 0; text-align: right; }
+  .hbar-track { flex: 1; background: #0d1b2a; border-radius: 3px; height: 14px; overflow: hidden; }
+  .hbar-fill { height: 100%; background: #1e8c73; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; font-size: 8px; color: #fff; font-weight: 600; }
+  .hbar-val { color: #4ecdc4; font-size: 9px; font-weight: 600; width: 36px; }
+
+  /* ---- TEAM ---- */
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .team-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; }
+  .team-table { width: 100%; font-size: 10px; border-collapse: collapse; }
+  .team-table th { color: #3d6178; font-weight: 600; text-align: left; padding: 4px 6px; border-bottom: 1px solid #1e3347; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .team-table td { color: #8bacc4; padding: 5px 6px; border-bottom: 1px solid #0d1b2a; font-size: 10px; }
+  .team-table td:last-child { color: #c8dde8; text-align: right; }
+  .load-bar { background: #0d1b2a; border-radius: 3px; height: 10px; width: 80px; overflow: hidden; }
+  .load-fill { height: 100%; background: #1e8c73; border-radius: 3px; }
+  .team-badge { display: inline-block; background: #1e4a3a; color: #4ecdc4; border-radius: 10px; font-size: 9px; padding: 1px 6px; }
+  .rev-row { display: flex; gap: 10px; margin-top: 10px; }
+  .rev-box { flex: 1; background: #0d1b2a; border-radius: 8px; padding: 10px 12px; }
+  .rev-label { color: #4a7a95; font-size: 9px; margin-bottom: 3px; }
+  .rev-val { color: #c8dde8; font-size: 14px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  /* ---- PROJECTS ---- */
+  .proj-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .proj-title-big { font-family: 'Space Grotesk', sans-serif; color: #e8f4f8; font-size: 18px; font-weight: 700; }
+  .proj-count { color: #4a7a95; font-size: 11px; }
+  .proj-btns { display: flex; gap: 6px; }
+  .proj-btn { background: #1a2f45; border: 1px solid #2a4a65; color: #8bacc4; border-radius: 6px; padding: 4px 10px; font-size: 10px; cursor: pointer; }
+  .proj-btn.primary { background: #1e8c73; border-color: #1e8c73; color: #fff; }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .proj-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; }
+  .proj-tags { display: flex; gap: 6px; margin-bottom: 8px; }
+  .proj-tag { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+  .proj-tag.seg { background: #1a2f45; color: #8bacc4; }
+  .proj-tag.active { background: #1e3a1a; color: #2ecc71; }
+  .proj-tag.exec { background: #1e2a3a; color: #4a9fd4; }
+  .proj-tag.init { background: #2a2a1e; color: #e8a838; }
+  .proj-name { color: #c8dde8; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .proj-ref { color: #4a7a95; font-size: 10px; margin-bottom: 8px; }
+  .proj-vals { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .proj-val-item { font-size: 9px; color: #4a7a95; }
+  .proj-val-item span { display: block; color: #c8dde8; font-weight: 600; font-size: 11px; }
+  .progress-track { background: #0d1b2a; border-radius: 3px; height: 5px; margin-bottom: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #1e8c73; border-radius: 3px; }
+  .proj-footer { display: flex; justify-content: space-between; align-items: center; color: #4a7a95; font-size: 9px; }
+
+  /* ---- PROJECT DETAIL ---- */
+  .detail-grid { display: grid; grid-template-columns: 1fr 300px; gap: 12px; }
+  .detail-main { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; }
+  .detail-sidebar { display: flex; flex-direction: column; gap: 10px; }
+  .detail-side-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 12px; }
+  .detail-label { color: #4a7a95; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px; }
+  .detail-val { color: #c8dde8; font-size: 11px; font-weight: 500; margin-bottom: 8px; }
+  .detail-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .progress-big { font-size: 22px; font-weight: 700; color: #1e8c73; font-family: 'Space Grotesk', sans-serif; }
+  .team-member { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .member-avatar { width: 26px; height: 26px; border-radius: 50%; background: #1e8c73; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; }
+  .member-name { color: #c8dde8; font-size: 11px; }
+  .member-role { color: #4a7a95; font-size: 9px; }
+
+  /* ---- TASKS ---- */
+  .task-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .task-stat { background: #122b40; border: 1px solid #1e3a52; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
+  .task-stat-num { font-size: 20px; font-weight: 700; color: #c8dde8; font-family: 'Space Grotesk', sans-serif; }
+  .task-stat-label { color: #4a7a95; font-size: 9px; }
+  .task-filters { display: flex; gap: 6px; margin-bottom: 10px; }
+  .task-filter { background: #122b40; border: 1px solid #1e3a52; color: #8bacc4; border-radius: 6px; padding: 4px 10px; font-size: 10px; }
+  .task-table { width: 100%; border-collapse: collapse; }
+  .task-table th { color: #3d6178; font-weight: 600; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 8px; border-bottom: 1px solid #1e3347; text-align: left; }
+  .task-table td { padding: 7px 8px; border-bottom: 1px solid #122b40; color: #8bacc4; font-size: 10px; }
+  .task-name { color: #c8dde8; font-weight: 500; font-size: 11px; }
+  .task-desc { color: #4a7a95; font-size: 9px; }
+  .task-proj { color: #4a9fd4; font-size: 10px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 3px; background: #1a2f45; color: #8bacc4; border-radius: 5px; padding: 2px 7px; font-size: 9px; font-weight: 600; }
+  .priority-badge { border-radius: 10px; padding: 2px 7px; font-size: 9px; font-weight: 600; }
+  .priority-badge.high { background: #3a1a1a; color: #e74c3c; }
+  .priority-badge.med { background: #2a2a1a; color: #e8a838; }
+
+  /* ---- LOGIN ---- */
+  .login-wrap { display: flex; align-items: center; justify-content: center; height: 100%; background: #0d1b2a; padding: 30px; }
+  .login-card { background: #112233; border: 1px solid #1e3a52; border-radius: 14px; padding: 32px 36px; width: 340px; }
+  .login-logo-wrap { display: flex; justify-content: center; margin-bottom: 20px; }
+  .login-logo { background: #1e8c73; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; padding: 8px 18px; border-radius: 8px; letter-spacing: 1px; }
+  .login-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #e8f4f8; text-align: center; margin-bottom: 4px; }
+  .login-sub { color: #4a7a95; font-size: 11px; text-align: center; margin-bottom: 20px; }
+  .login-label { color: #8bacc4; font-size: 11px; font-weight: 500; margin-bottom: 5px; }
+  .login-input { width: 100%; background: #0d1b2a; border: 1px solid #1e3a52; border-radius: 7px; padding: 9px 12px; color: #c8dde8; font-size: 12px; margin-bottom: 12px; font-family: inherit; }
+  .login-btn { width: 100%; background: #1e8c73; border: none; color: #fff; border-radius: 7px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .login-note { color: #3d6178; font-size: 10px; text-align: center; margin-top: 14px; }
+
+  /* ---- SETTINGS ---- */
+  .settings-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .settings-profile { background: #1a3347; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .settings-avatar { width: 44px; height: 44px; border-radius: 50%; background: #1e8c73; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 700; }
+  .settings-name { color: #e8f4f8; font-size: 15px; font-weight: 600; }
+  .settings-email { color: #4a7a95; font-size: 11px; }
+  .admin-badge { background: #3a1a2a; color: #e85494; border-radius: 10px; font-size: 9px; padding: 2px 7px; font-weight: 600; display: inline-block; margin-left: 6px; }
+  .settings-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .settings-tab { background: #122b40; border: 1px solid #1e3a52; color: #8bacc4; border-radius: 6px; padding: 5px 12px; font-size: 11px; cursor: pointer; }
+  .settings-tab.active { background: #1a3a52; color: #4ecdc4; border-color: #1e8c73; }
+  .settings-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; margin-bottom: 8px; }
+  .settings-section-title { color: #c8dde8; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .settings-section-sub { color: #4a7a95; font-size: 10px; margin-bottom: 12px; }
+  .color-swatch-row { display: flex; gap: 8px; }
+  .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; position: relative; }
+  .color-swatch.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 12px; font-weight: 700; }
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1e3347; }
+  .toggle-label { color: #c8dde8; font-size: 12px; }
+  .toggle-sub { color: #4a7a95; font-size: 9px; }
+  .toggle { width: 36px; height: 20px; background: #1e3a52; border-radius: 10px; position: relative; cursor: pointer; }
+  .toggle-knob { width: 16px; height: 16px; background: #4a7a95; border-radius: 50%; position: absolute; top: 2px; left: 2px; }
+
+  /* ---- KANBAN ---- */
+  .kanban-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .kanban-col { background: #0d1b2a; border-radius: 8px; padding: 10px; }
+  .kanban-col-title { color: #8bacc4; font-size: 11px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .kanban-badge { background: #1a2f45; color: #4a7a95; border-radius: 10px; font-size: 9px; padding: 1px 6px; }
+  .kanban-card { background: #122b40; border: 1px solid #1e3a52; border-radius: 7px; padding: 10px; margin-bottom: 6px; }
+  .kanban-card-tag { font-size: 8px; padding: 1px 6px; border-radius: 8px; margin-bottom: 5px; display: inline-block; }
+  .kanban-card-text { color: #c8dde8; font-size: 10px; margin-bottom: 5px; }
+  .kanban-card-date { color: #4a7a95; font-size: 9px; }
+  .kanban-empty { color: #3d6178; font-size: 10px; text-align: center; padding: 20px 0; }
+  .kanban-add-btn { background: #1e8c73; border: none; color: #fff; border-radius: 6px; padding: 5px 10px; font-size: 10px; font-weight: 600; cursor: pointer; float: right; }
+
+  /* ---- CREATE PROJECT ---- */
+  .create-title { font-family: 'Space Grotesk', sans-serif; color: #e8f4f8; font-size: 18px; font-weight: 700; margin-bottom: 3px; }
+  .create-sub { color: #4a7a95; font-size: 11px; margin-bottom: 14px; }
+  .create-section { background: #122b40; border: 1px solid #1e3a52; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .create-section-title { color: #c8dde8; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .create-section-sub { color: #4a7a95; font-size: 9px; margin-bottom: 12px; }
+  .stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
+  .stage-btn { background: #0d1b2a; border: 1px solid #1e3347; color: #8bacc4; border-radius: 6px; padding: 7px 5px; font-size: 10px; text-align: center; cursor: pointer; }
+  .stage-btn.selected { border-color: #1e8c73; color: #4ecdc4; background: #0d2a1e; }
+  .stage-btn.lost { background: #3a1a1a; border-color: #e74c3c; color: #e74c3c; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .form-label { color: #8bacc4; font-size: 10px; font-weight: 500; margin-bottom: 4px; }
+  .form-input { width: 100%; background: #0d1b2a; border: 1px solid #1e3347; border-radius: 6px; padding: 7px 10px; color: #c8dde8; font-size: 11px; font-family: inherit; }
+  .form-select { width: 100%; background: #0d1b2a; border: 1px solid #1e3347; border-radius: 6px; padding: 7px 10px; color: #4a7a95; font-size: 11px; font-family: inherit; }
+
+  /* ---- REVENUE ---- */
+  .revenue-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .rev-tab { background: #122b40; border: 1px solid #1e3a52; color: #8bacc4; border-radius: 6px; padding: 4px 12px; font-size: 10px; cursor: pointer; }
+  .rev-tab.active { background: #1e3a52; color: #4ecdc4; border-color: #1e8c73; }
+  .rev-total-card { background: #1a3347; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  .rev-total-label { color: #4a7a95; font-size: 10px; margin-bottom: 4px; }
+  .rev-total-val { font-family: 'Space Grotesk', sans-serif; color: #4ecdc4; font-size: 26px; font-weight: 700; }
+  .rev-total-count { color: #4a7a95; font-size: 10px; margin-top: 2px; }
+  .view-tabs { display: flex; background: #0d1b2a; border-radius: 8px; padding: 3px; margin-bottom: 10px; }
+  .view-tab { flex: 1; text-align: center; padding: 5px; font-size: 10px; color: #4a7a95; border-radius: 6px; cursor: pointer; }
+  .view-tab.active { background: #122b40; color: #c8dde8; font-weight: 600; }
+  .rev-item { background: #122b40; border: 1px solid #1e3a52; border-radius: 8px; padding: 12px 14px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .rev-item-name { color: #c8dde8; font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+  .rev-item-tags { display: flex; gap: 5px; }
+  .rev-item-val { text-align: right; }
+  .rev-item-amount { color: #4ecdc4; font-size: 13px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+  .rev-item-margin { color: #4a7a95; font-size: 9px; }
+
+  /* ---- NAV CONTROLS ---- */
+  .controls {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: #091622;
+    border-top: 1px solid #1e3347;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    z-index: 200;
+  }
+  .ctrl-btn {
+    background: #1a2f45;
+    border: 1px solid #2a4a65;
+    color: #8bacc4;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+  }
+  .ctrl-btn:hover { background: #1e3a52; }
+  .ctrl-btn.primary { background: #1e8c73; border-color: #1e8c73; color: #fff; }
+  .ctrl-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-dots { display: flex; gap: 6px; align-items: center; }
+  .slide-dot { width: 6px; height: 6px; border-radius: 50%; background: #1e3347; cursor: pointer; transition: all 0.2s; }
+  .slide-dot.active { background: #1e8c73; width: 18px; border-radius: 3px; }
+  .slide-label { color: #4a7a95; font-size: 10px; }
+  .progress-bar-demo { height: 2px; background: #1e3347; position: absolute; top: 0; left: 0; right: 0; }
+  .progress-bar-fill { height: 100%; background: #1e8c73; transition: width 0.4s ease; }
+</style>
+
+<div class="demo-wrap" id="demo">
+
+  <!-- SLIDE 1: LOGIN -->
+  <div class="slide active" id="slide-0">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; background: #0d1b2a; padding: 20px;">
+      <div class="login-card" style="animation: fadeIn 0.7s ease;">
+        <div class="login-logo-wrap">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="background: #1e8c73; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+              <span style="color: #fff; font-family: Space Grotesk; font-weight: 700; font-size: 16px;">S</span>
+            </div>
+            <span style="font-family: Space Grotesk; font-weight: 700; font-size: 18px; color: #e8f4f8;">SalesTrackerX</span>
+          </div>
+        </div>
+        <div class="login-title" style="margin-top: 8px;">Welcome Back</div>
+        <div class="login-sub">Sign in to access your sales platform</div>
+        <div class="login-label">Email</div>
+        <input class="login-input" placeholder="you@yourcompany.com" readonly />
+        <div class="login-label">Password</div>
+        <input class="login-input" type="password" placeholder="••••••••••" readonly />
+        <button class="login-btn">Sign In</button>
+        <div class="login-note">Access is restricted to authorised users only</div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Secure Login</div>
+      <div class="callout-text">SalesTrackerX provides a clean, secure login portal. Access is role-based — each team member sees only what they need to be effective.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: DASHBOARD -->
+  <div class="slide" id="slide-1">
+    <div class="nav-bar">
+      <div class="nav-logo">
+        <div class="logo-box"><span>S</span></div>
+        <span class="logo-name">SalesTrackerX</span>
+      </div>
+      <div class="nav-right">
+        <div class="nav-btn">Refresh</div>
+        <div class="nav-btn">$ USD</div>
+        <div class="notif"><div style="color:#8bacc4; font-size:14px;">&#128276;</div><div class="notif-dot">4</div></div>
+        <div class="nav-avatar">A</div>
+      </div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> Dashboard</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/><rect x="7" y="4" width="2" height="5"/><rect x="7" y="10" width="2" height="2"/></svg> All Tasks</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="11" rx="2"/><rect x="4" y="1" width="2" height="4" rx="1"/><rect x="10" y="1" width="2" height="4" rx="1"/></svg> Calendar</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><circle cx="5" cy="5" r="3"/><circle cx="11" cy="5" r="3"/><circle cx="8" cy="12" r="3"/></svg> Team</div>
+        <div class="sb-divider"></div>
+        <div class="sb-section">Sectors</div>
+        <div class="sb-sector">&#9632; Oil &amp; Gas</div>
+        <div class="sb-sector">&#9632; Manufacturing</div>
+        <div class="sb-sector">&#9632; Services</div>
+        <div class="sb-sector">&#9632; Healthcare</div>
+        <div class="sb-sector">&#9632; Renewables</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="kpi-header">
+          <div class="kpi-greeting">&#9728; Good morning, Sales Team</div>
+          <div class="kpi-sub">Here's your project overview — live data</div>
+        </div>
+        <div class="kpi-label">KEY PERFORMANCE INDICATORS</div>
+        <div class="kpi-grid">
+          <div class="kpi-card blue">
+            <div class="kpi-badge">Active</div>
+            <div class="kpi-card-label">Total PO Value (USD)</div>
+            <div class="kpi-card-val">$25.01M</div>
+            <div class="kpi-card-sub">26 won opportunities</div>
+          </div>
+          <div class="kpi-card teal">
+            <div class="kpi-card-label">Active Pipeline (USD)</div>
+            <div class="kpi-card-val">$30.86M</div>
+            <div class="kpi-card-sub">95 open opportunities</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-card-label">Total Commission</div>
+            <div class="kpi-card-val">$4.80M</div>
+            <div class="kpi-card-sub">Across all segments</div>
+          </div>
+          <div class="kpi-card pink">
+            <div class="kpi-card-label">Total Opportunities</div>
+            <div class="kpi-card-val">255</div>
+            <div class="kpi-card-sub">4 business segments</div>
+          </div>
+          <div class="kpi-card purple">
+            <div class="kpi-card-label">Win Rate</div>
+            <div class="kpi-card-val">10.20%</div>
+            <div class="kpi-card-sub">26 won / 255 total</div>
+          </div>
+          <div class="kpi-card teal" style="border-top-color: #e8a838;">
+            <div class="kpi-card-label">Margin % (USD)</div>
+            <div class="kpi-card-val" style="color:#e8a838;">28.37%</div>
+            <div class="kpi-card-sub">Across all projects</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Executive Dashboard</div>
+      <div class="callout-text">Get a real-time birds-eye view of your entire sales operation — pipeline value, win rates, commissions, and margins. All live data, all in one place.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: PIPELINE ANALYSIS -->
+  <div class="slide" id="slide-2">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">$ USD</div><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> Dashboard</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="section-title">PIPELINE &amp; REVENUE ANALYSIS</div>
+        <div class="filter-row">
+          <div class="filter-pill">&#9660; Project Lead</div>
+          <div class="filter-pill">&#9660; Pipeline Stage</div>
+          <div class="filter-pill">&#9660; Business Segment</div>
+          <div class="filter-pill">&#9660; Start Date</div>
+          <div class="filter-pill">&#9660; Client</div>
+          <div class="filter-pill">&#9660; Product</div>
+        </div>
+        <div class="pipeline-grid">
+          <div class="pipeline-card">
+            <div class="pipeline-card-title">Sales Pipeline Funnel</div>
+            <div class="pipeline-card-sub">Opportunities by stage — count &amp; relative volume</div>
+            <div class="funnel-row"><div class="funnel-label">Cold</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:78%; background:#4a6580;">40 opportunities</div></div><div class="funnel-count">40</div></div>
+            <div class="funnel-row"><div class="funnel-label">Initiation</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:95%; background:#8b5cf6;">47 opportunities</div></div><div class="funnel-count">47</div></div>
+            <div class="funnel-row"><div class="funnel-label">Qualification</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:8%; background:#1e8c73;">1</div></div><div class="funnel-count">1</div></div>
+            <div class="funnel-row"><div class="funnel-label">Proposal</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:44%; background:#4a9fd4;">22 opportunities</div></div><div class="funnel-count">22</div></div>
+            <div class="funnel-row"><div class="funnel-label">Negotiation</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:22%; background:#e8a838;">10 opportunities</div></div><div class="funnel-count">10</div></div>
+            <div class="funnel-row"><div class="funnel-label">Execution</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:26%; background:#1e8c73;">13 opportunities</div></div><div class="funnel-count">13</div></div>
+            <div class="funnel-row"><div class="funnel-label">Closure</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:22%; background:#2ecc71;">11 opportunities</div></div><div class="funnel-count">11</div></div>
+            <div class="funnel-row"><div class="funnel-label">Lost</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:2%; background:#e74c3c;"></div></div><div class="funnel-count">0</div></div>
+            <div class="donut-row">
+              <div class="donut-legend">
+                <span><span class="legend-dot" style="background:#4a6580;"></span>Cold 27%</span>
+                <span><span class="legend-dot" style="background:#8b5cf6;"></span>Initiation 32%</span>
+                <span><span class="legend-dot" style="background:#4a9fd4;"></span>Proposal 15%</span>
+                <span><span class="legend-dot" style="background:#e8a838;"></span>Negotiation 7%</span>
+                <span><span class="legend-dot" style="background:#1e8c73;"></span>Execution 9%</span>
+                <span><span class="legend-dot" style="background:#2ecc71;"></span>Closure 8%</span>
+              </div>
+            </div>
+          </div>
+          <div class="pipeline-card">
+            <div class="pipeline-card-title">Segment Breakdown</div>
+            <div class="pipeline-card-sub">Opportunity count per business unit</div>
+            <div class="bar-chart">
+              <div class="bar-col"><div class="bar-rect" style="height: 100%; background:#1e8c73;"><div class="bar-val">231</div></div><div class="bar-label">Oil &amp; Gas</div></div>
+              <div class="bar-col"><div class="bar-rect" style="height: 16%; background:#4a9fd4;"><div class="bar-val">19</div></div><div class="bar-label">Mfg</div></div>
+              <div class="bar-col"><div class="bar-rect" style="height: 4%; background:#8b5cf6;"><div class="bar-val">3</div></div><div class="bar-label">Renew.</div></div>
+              <div class="bar-col"><div class="bar-rect" style="height: 3%; background:#e8a838;"><div class="bar-val">2</div></div><div class="bar-label">Trading</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Pipeline Funnel &amp; Segment Breakdown</div>
+      <div class="callout-text">Visualise every deal across all pipeline stages at a glance. Filter by lead, stage, segment, or date to drill into what's moving — and what needs attention.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: CLIENT & PRODUCT ANALYTICS -->
+  <div class="slide" id="slide-3">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">$ USD</div><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="section-title">CLIENT &amp; PRODUCT ANALYTICS</div>
+        <div class="analytics-grid">
+          <div class="an-card">
+            <div class="an-card-title">Top Clients by PO Value</div>
+            <div class="an-card-sub">Ranked by contract value (USD)</div>
+            <div class="hbar-row"><div class="hbar-label">Client A</div><div class="hbar-track"><div class="hbar-fill" style="width:10%;">$1.0M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Client B</div><div class="hbar-track"><div class="hbar-fill" style="width:14%;">$1.3M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Client C</div><div class="hbar-track"><div class="hbar-fill" style="width:16%;">$1.5M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Client D</div><div class="hbar-track"><div class="hbar-fill" style="width:31%;">$3.1M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Client E</div><div class="hbar-track"><div class="hbar-fill" style="width:38%;">$3.8M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Client F</div><div class="hbar-track"><div class="hbar-fill" style="width:60%;">$6.0M</div></div></div>
+            <div class="hbar-row"><div class="hbar-label">Top Client</div><div class="hbar-track"><div class="hbar-fill" style="width:100%; background:#4ecdc4;">$37.4M</div></div></div>
+          </div>
+          <div class="an-card">
+            <div class="an-card-title">Pipeline Stage Distribution</div>
+            <div class="an-card-sub">Projects by pipeline stage</div>
+            <div style="margin: 8px 0;">
+              <div class="funnel-row"><div class="funnel-label" style="width:80px;">Lost</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:90%; background:#e74c3c;">109</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:80px;">Initiation</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:38%; background:#8b5cf6;">47</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:80px;">Cold</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:32%; background:#4a6580;">40</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:80px;">Proposal</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%; background:#4a9fd4;">22</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:80px;">Execution</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:10%; background:#1e8c73;">13</div></div></div>
+            </div>
+          </div>
+          <div class="an-card">
+            <div class="an-card-title">Product Category Mix</div>
+            <div class="an-card-sub">Number of opportunities per category</div>
+            <div style="margin-top: 6px;">
+              <div class="funnel-row"><div class="funnel-label" style="width:100px; font-size:9px;">Equipment (EQMT)</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%; background:#4a9fd4;">144</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:100px; font-size:9px;">Consumables</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:19%; background:#e8a838;">28</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:100px; font-size:9px;">Meters Offgrid</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:8%; background:#8b5cf6;">12</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:100px; font-size:9px;">O&amp;M</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:3%; background:#1e8c73;">4</div></div></div>
+              <div class="funnel-row"><div class="funnel-label" style="width:100px; font-size:9px;">Manpower</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:2%; background:#e85494;">2</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Client &amp; Product Analytics</div>
+      <div class="callout-text">Understand your top revenue clients, how your pipeline is distributed by stage, and which product categories are generating the most deals — all exportable.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: TEAM PERFORMANCE -->
+  <div class="slide" id="slide-4">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">$ USD</div><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><circle cx="5" cy="5" r="3"/><circle cx="11" cy="5" r="3"/><circle cx="8" cy="12" r="3"/></svg> Team</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="section-title">TEAM PERFORMANCE &amp; LEAD ANALYSIS</div>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="pipeline-card-title" style="margin-bottom:8px;">Pipeline by Sales Lead</div>
+            <table class="team-table">
+              <thead><tr><th>Account</th><th>Location</th><th>Owner</th><th>Opps</th></tr></thead>
+              <tbody>
+                <tr><td>Alpha Corp</td><td>Lagos</td><td>Sales Lead A</td><td style="color:#4ecdc4;">1</td></tr>
+                <tr><td>Beta Industries</td><td>Abuja</td><td>Sales Lead B</td><td style="color:#4ecdc4;">1</td></tr>
+                <tr><td>Gamma Ltd</td><td>PH</td><td>Sales Lead A</td><td style="color:#4ecdc4;">1</td></tr>
+                <tr><td>Delta Group</td><td>Lagos</td><td>Sales Lead C</td><td style="color:#4ecdc4;">2</td></tr>
+                <tr><td>Epsilon Co</td><td>Lagos</td><td>Sales Lead B</td><td style="color:#4ecdc4;">1</td></tr>
+                <tr><td>Zeta Partners</td><td>Warri</td><td>Sales Lead D</td><td style="color:#4ecdc4;">3</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="team-card">
+            <div class="pipeline-card-title" style="margin-bottom:8px;">Team Opportunity Load</div>
+            <table class="team-table">
+              <thead><tr><th>Lead</th><th>Deals</th><th>Load</th><th>Won</th><th>Active</th></tr></thead>
+              <tbody>
+                <tr><td>Lead Alpha</td><td>105</td><td><div class="load-bar"><div class="load-fill" style="width:100%;"></div></div></td><td><span class="team-badge">13</span></td><td><span class="team-badge">34</span></td></tr>
+                <tr><td>Lead Beta</td><td>69</td><td><div class="load-bar"><div class="load-fill" style="width:65%;"></div></div></td><td><span class="team-badge">4</span></td><td><span class="team-badge">34</span></td></tr>
+                <tr><td>Lead Gamma</td><td>21</td><td><div class="load-bar"><div class="load-fill" style="width:20%;"></div></div></td><td><span class="team-badge">1</span></td><td><span class="team-badge">3</span></td></tr>
+                <tr><td>Lead Delta</td><td>16</td><td><div class="load-bar"><div class="load-fill" style="width:15%;"></div></div></td><td><span class="team-badge">0</span></td><td><span class="team-badge">4</span></td></tr>
+                <tr><td>Lead Epsilon</td><td>14</td><td><div class="load-bar"><div class="load-fill" style="width:13%;"></div></div></td><td><span class="team-badge">6</span></td><td><span class="team-badge">7</span></td></tr>
+              </tbody>
+            </table>
+            <div class="rev-row">
+              <div class="rev-box"><div class="rev-label">Total Revenue (Local)</div><div class="rev-val">₦150.82B</div></div>
+              <div class="rev-box"><div class="rev-label">Total Revenue (USD)</div><div class="rev-val">$95.97M</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Team Performance</div>
+      <div class="callout-text">Monitor each sales lead's deal load, win count, and active deals in real time. Balance workloads and identify your top performers with precision.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: ALL PROJECTS -->
+  <div class="slide" id="slide-5">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">Refresh</div><div class="nav-btn">Generate Report</div><div class="nav-btn primary" style="background:#1e8c73; color:#fff; border-color:#1e8c73;">+ New Project</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="proj-header">
+          <div><div class="proj-title-big">Projects</div><div class="proj-count">255 projects found</div></div>
+        </div>
+        <div class="projects-grid">
+          <div class="proj-card">
+            <div class="proj-tags"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag active">active</span></div>
+            <div class="proj-name">Supply of Mechanical Seals</div>
+            <div class="proj-ref">OPP-2604-001 · Initiation</div>
+            <div class="progress-track"><div class="progress-fill" style="width:10%;"></div></div>
+            <div class="proj-footer"><span>2 team members</span><span>0/0 tasks</span><span>Dec 31</span></div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-tags"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag active">active</span></div>
+            <div class="proj-name">Industrial Gearbox Overhaul</div>
+            <div class="proj-ref">OPP-2604-002 · Initiation</div>
+            <div class="progress-track"><div class="progress-fill" style="width:10%;"></div></div>
+            <div class="proj-footer"><span>2 team members</span><span>0/0 tasks</span><span>Nov 30</span></div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-tags"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag exec">execution</span></div>
+            <div class="proj-name">Cable Gland &amp; Copper Lugs</div>
+            <div class="proj-ref">OPP-2604-003 · Execution</div>
+            <div class="proj-vals"><div class="proj-val-item">Contract Value<span>$91.64</span></div><div class="proj-val-item">Margin<span>$37.57</span></div></div>
+            <div class="progress-track"><div class="progress-fill" style="width:85%;"></div></div>
+            <div class="proj-footer"><span>2 team members</span><span>85% progress</span><span>Nov 21</span></div>
+          </div>
+          <div class="proj-card">
+            <div class="proj-tags"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag exec">execution</span></div>
+            <div class="proj-name">Refrigerating Compressor Supply</div>
+            <div class="proj-ref">OPP-2604-004 · Execution</div>
+            <div class="proj-vals"><div class="proj-val-item">Contract Value<span>$720.52</span></div><div class="proj-val-item">Margin<span>$281.00</span></div></div>
+            <div class="progress-track"><div class="progress-fill" style="width:85%;"></div></div>
+            <div class="proj-footer"><span>2 team members</span><span>85% progress</span><span>Dec 31</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Projects Overview</div>
+      <div class="callout-text">Every opportunity in one organised view — with pipeline stage, progress, contract value, margin, and team assignment. Filter, search, import, or generate a report in seconds.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: PROJECT DETAIL -->
+  <div class="slide" id="slide-6">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">Report</div><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom: 10px;">
+          <div style="color:#4a7a95; font-size:12px;">&#8592;</div>
+          <div class="proj-tags" style="margin:0;"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag exec">active</span></div>
+        </div>
+        <div style="font-family: Space Grotesk; color:#e8f4f8; font-size:18px; font-weight:700; margin-bottom:12px;">OPP-2604-003 — Cable Gland &amp; Copper Lugs</div>
+        <div class="detail-grid">
+          <div class="detail-main">
+            <div style="color:#c8dde8; font-size:13px; font-weight:600; margin-bottom:12px;">About this project</div>
+            <div class="detail-grid2">
+              <div><div class="detail-label">Client</div><div class="detail-val">Preferred Client Co.</div></div>
+              <div><div class="detail-label">Client Contact</div><div class="detail-val">Key Account Manager</div></div>
+              <div><div class="detail-label">Location</div><div class="detail-val">Lagos, Nigeria</div></div>
+              <div><div class="detail-label">Business Segment</div><div class="detail-val">Oil &amp; Gas</div></div>
+              <div><div class="detail-label">Pipeline Stage</div><div class="detail-val">Execution</div></div>
+              <div><div class="detail-label">Channel Partner</div><div class="detail-val">J&amp;G Supplies</div></div>
+              <div><div class="detail-label">Contract Value</div><div class="detail-val">$91.64</div></div>
+              <div><div class="detail-label">Margin %</div><div class="detail-val">41%</div></div>
+              <div><div class="detail-label">Deal Probability</div><div class="detail-val"><span style="background:#1e3a1a; color:#2ecc71; border-radius:10px; padding:2px 8px; font-size:10px;">High</span></div></div>
+            </div>
+            <div style="margin-top:12px; padding-top:10px; border-top:1px solid #1e3347;">
+              <div class="detail-label">Project Lead Comments</div>
+              <div style="color:#8bacc4; font-size:10px; margin-top:4px; line-height:1.6;">Client issued PO. Supplier confirmed delivery. Finance assured payment before month end.</div>
+            </div>
+          </div>
+          <div class="detail-sidebar">
+            <div class="detail-side-card">
+              <div style="color:#c8dde8; font-size:13px; font-weight:600; margin-bottom:8px;">Progress</div>
+              <div class="progress-big">85%</div>
+              <div class="progress-track" style="margin-top:8px;"><div class="progress-fill" style="width:85%;"></div></div>
+              <div style="color:#4a7a95; font-size:10px; margin-top:4px;">Stage: Execution</div>
+              <div style="color:#4a7a95; font-size:10px; margin-top:2px;">Tasks completed: 0/0</div>
+            </div>
+            <div class="detail-side-card">
+              <div style="color:#c8dde8; font-size:13px; font-weight:600; margin-bottom:8px;">Team</div>
+              <div class="team-member"><div class="member-avatar">A</div><div><div class="member-name">Project Lead A</div><div class="member-role">Project Lead</div></div></div>
+              <div class="team-member"><div class="member-avatar" style="background:#8b5cf6;">B</div><div><div class="member-name">Assignee B</div><div class="member-role">Assignee</div></div></div>
+              <div style="color:#4a7a95; font-size:10px; margin-top:4px;">Team Size: 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Project Detail View</div>
+      <div class="callout-text">Every project has a dedicated detail page — client info, contract values, margins, pipeline stage, team assignments, deal probability, and a full comment log.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: TASKS / KANBAN -->
+  <div class="slide" id="slide-7">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">Refresh</div><div class="nav-btn">Generate Report</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/><rect x="7" y="4" width="2" height="5"/><rect x="7" y="10" width="2" height="2"/></svg> All Tasks</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <div><div class="proj-title-big">All Tasks</div><div class="proj-count">15 of 15 tasks</div></div>
+          <div style="display:flex; gap:6px;">
+            <div style="background:#122b40; border:1px solid #1e3a52; color:#4ecdc4; border-radius:6px; padding:5px 12px; font-size:11px; font-weight:600;">Kanban Board</div>
+            <div style="background:#0d1b2a; border:1px solid #1e3347; color:#8bacc4; border-radius:6px; padding:5px 12px; font-size:11px;">Task List</div>
+          </div>
+        </div>
+        <div class="task-stats">
+          <div class="task-stat"><div class="task-stat-num">15</div><div class="task-stat-label">To Do</div></div>
+          <div class="task-stat"><div class="task-stat-num">0</div><div class="task-stat-label">In Progress</div></div>
+          <div class="task-stat"><div class="task-stat-num">0</div><div class="task-stat-label">In Review</div></div>
+          <div class="task-stat"><div class="task-stat-num">0</div><div class="task-stat-label">Completed</div></div>
+        </div>
+        <div class="kanban-grid">
+          <div class="kanban-col">
+            <div class="kanban-col-title">To Do <span class="kanban-badge">1</span></div>
+            <div class="kanban-card">
+              <div class="kanban-card-tag proj-tag med" style="background:#2a2a1a; color:#e8a838;">medium</div>
+              <div class="kanban-card-text">Update supplier status list</div>
+              <div class="kanban-card-date">Due Apr 28</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-tag proj-tag" style="background:#3a1a1a; color:#e74c3c;">high</div>
+              <div class="kanban-card-text">Proposal status follow-up — LS Gear</div>
+              <div class="kanban-card-date">Due Apr 28</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-tag proj-tag" style="background:#3a1a1a; color:#e74c3c;">high</div>
+              <div class="kanban-card-text">PO Issuance status — 8K HRS Inspection</div>
+              <div class="kanban-card-date">Due Apr 23</div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">In Progress <span class="kanban-badge">0</span></div>
+            <div class="kanban-empty">No tasks</div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">In Review <span class="kanban-badge">0</span></div>
+            <div class="kanban-empty">No tasks</div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-title">Completed <span class="kanban-badge">0</span></div>
+            <div class="kanban-empty">No tasks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Task Management — Kanban &amp; List View</div>
+      <div class="callout-text">Manage all project tasks on a visual Kanban board or a sortable list. Assign priorities, set due dates, and track status across every project in the pipeline.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: CREATE PROJECT -->
+  <div class="slide" id="slide-8">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div class="create-title">Create New Project</div>
+        <div class="create-sub">Fill in the details to add a new opportunity to the pipeline</div>
+        <div class="create-section">
+          <div class="create-section-title">Pipeline Stage</div>
+          <div class="create-section-sub">Current stage in the sales pipeline</div>
+          <div class="stage-grid">
+            <div class="stage-btn">Cold</div>
+            <div class="stage-btn selected">&#10003; Initiation</div>
+            <div class="stage-btn">Qualification</div>
+            <div class="stage-btn">Proposal</div>
+            <div class="stage-btn">Negotiation</div>
+            <div class="stage-btn">Approval / Won</div>
+            <div class="stage-btn">Execution</div>
+            <div class="stage-btn">Closure</div>
+          </div>
+          <div style="margin-top:6px;"><span class="stage-btn lost" style="display:inline-block;">Lost</span></div>
+        </div>
+        <div class="create-section">
+          <div class="create-section-title">Basic Information</div>
+          <div class="create-section-sub">Core project details</div>
+          <div class="form-row">
+            <div><div class="form-label">Project Name *</div><div class="form-input">Enter project name</div></div>
+            <div><div class="form-label">Sector *</div><div class="form-select" style="color:#4a7a95;">Select sector &#9660;</div></div>
+          </div>
+          <div><div class="form-label">Description *</div><div style="width:100%; background:#0d1b2a; border:1px solid #1e3347; border-radius:6px; padding:8px 10px; color:#4a7a95; font-size:11px; height:52px;">Describe the project objectives and scope...</div></div>
+        </div>
+        <div class="create-section" style="margin-bottom:0;">
+          <div class="create-section-title">Product &amp; Business Details</div>
+          <div class="form-row">
+            <div><div class="form-label">Business Segment</div><div class="form-select" style="color:#4a7a95;">Select segment &#9660;</div></div>
+            <div><div class="form-label">Product</div><div class="form-select" style="color:#4a7a95;">Select products &#9660;</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Create New Project</div>
+      <div class="callout-text">Adding a new opportunity takes seconds. Set the pipeline stage, fill in project details, assign the business segment and product, attach documents, and hit create.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: REVENUE ANALYTICS -->
+  <div class="slide" id="slide-9">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-btn">$ USD</div><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item active"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div style="font-size:16px; font-weight:700; color:#c8dde8; font-family:Space Grotesk; margin-bottom:10px;">Revenue Analytics</div>
+        <div class="revenue-tabs">
+          <div class="rev-tab active">All Projects</div>
+          <div class="rev-tab">Pending</div>
+          <div class="rev-tab">In Proposal</div>
+          <div class="rev-tab">Won</div>
+        </div>
+        <div class="rev-total-card">
+          <div class="rev-total-label">Total Revenue (All Projects)</div>
+          <div class="rev-total-val">$95.97M</div>
+          <div class="rev-total-count">255 projects</div>
+        </div>
+        <div class="view-tabs">
+          <div class="view-tab active">$ By Project</div>
+          <div class="view-tab">By Team</div>
+          <div class="view-tab">By Customer</div>
+          <div class="view-tab">By Segment</div>
+        </div>
+        <div class="rev-item">
+          <div><div class="rev-item-name">Gas Turbine Supply — 3x Units LT16</div><div class="rev-item-tags"><span class="proj-tag seg">Oil &amp; Gas</span><span class="proj-tag exec">execution</span></div></div>
+          <div class="rev-item-val"><div class="rev-item-amount">$37.40M</div><div class="rev-item-margin">M: $2.81M</div></div>
+        </div>
+        <div class="rev-item">
+          <div><div class="rev-item-name">GT Fuel Nozzles Extended Supply</div><div class="rev-item-tags"><span class="proj-tag seg">Oil &amp; Gas</span></div></div>
+          <div class="rev-item-val"><div class="rev-item-amount">$11.16M</div><div class="rev-item-margin">M: $6.70M</div></div>
+        </div>
+        <div class="rev-item">
+          <div><div class="rev-item-name">Natural Gas Turbine — Awoba Site</div><div class="rev-item-tags"><span class="proj-tag seg">Oil &amp; Gas</span></div></div>
+          <div class="rev-item-val"><div class="rev-item-amount">$6.00M</div><div class="rev-item-margin">M: $600K</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Revenue Analytics</div>
+      <div class="callout-text">Slice and dice your revenue by project, team, customer, or segment. Instantly see which projects are driving the most value — and the margins behind each one.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: SETTINGS -->
+  <div class="slide" id="slide-10">
+    <div class="nav-bar">
+      <div class="nav-logo"><div class="logo-box"><span>S</span></div><span class="logo-name">SalesTrackerX</span></div>
+      <div class="nav-right"><div class="nav-avatar">A</div></div>
+    </div>
+    <div class="app-body">
+      <div class="sidebar">
+        <button class="sidebar-new-btn">+ New Project</button>
+        <div class="sb-section">Main</div>
+        <div class="sb-item"><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="3" rx="1"/><rect x="1" y="6" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg> All Projects</div>
+      </div>
+      <div class="main-content" style="padding-bottom: 60px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:36px; height:36px; background:#1a3347; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#4ecdc4; font-size:16px;">&#9881;</div>
+          <div><div style="font-family:Space Grotesk; color:#e8f4f8; font-size:16px; font-weight:700;">Settings</div><div style="color:#4a7a95; font-size:10px;">Manage your account and preferences</div></div>
+        </div>
+        <div class="settings-profile">
+          <div class="settings-avatar">A</div>
+          <div>
+            <div class="settings-name">Admin User <span class="admin-badge">Admin</span></div>
+            <div class="settings-email">admin@yourcompany.com</div>
+          </div>
+        </div>
+        <div class="settings-tabs">
+          <div class="settings-tab">Access</div>
+          <div class="settings-tab">Password</div>
+          <div class="settings-tab">Email</div>
+          <div class="settings-tab active">Appearance</div>
+        </div>
+        <div class="settings-card">
+          <div class="settings-section-title">Appearance</div>
+          <div class="settings-section-sub">Customise the look and feel of SalesTrackerX</div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Dark Mode</div><div class="toggle-sub">Toggle between light and dark themes</div></div>
+            <div class="toggle"><div class="toggle-knob"></div></div>
+          </div>
+          <div style="margin-top:10px;">
+            <div style="color:#8bacc4; font-size:11px; margin-bottom:8px;">Theme Colors</div>
+            <div class="color-swatch-row">
+              <div class="color-swatch selected" style="background:#1e3347;"></div>
+              <div class="color-swatch" style="background:#1a3080;"></div>
+              <div class="color-swatch" style="background:#1e8c73;"></div>
+              <div class="color-swatch" style="background:#6b21a8;"></div>
+              <div class="color-swatch" style="background:#c2570a;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <div class="settings-section-title">Email Notification Settings</div>
+          <div class="settings-section-sub">Configure email notifications for project and task assignments</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="background:#0d1b2a; border-radius:6px; padding:8px 10px; font-size:10px; color:#8bacc4;"><strong style="color:#c8dde8;">Project Assignment</strong><br>Sent when a team member is assigned as project lead or assignee</div>
+            <div style="background:#0d1b2a; border-radius:6px; padding:8px 10px; font-size:10px; color:#8bacc4;"><strong style="color:#c8dde8;">Task Assignment</strong><br>Sent when a team member is assigned a new task</div>
+            <div style="background:#0d1b2a; border-radius:6px; padding:8px 10px; font-size:10px; color:#8bacc4;"><strong style="color:#c8dde8;">Deadline Reminder</strong><br>Sent as a reminder when task deadlines are approaching</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">&#9654; Settings &amp; Customisation</div>
+      <div class="callout-text">SalesTrackerX is fully customisable — theme colours, dark/light mode, email notifications, and role-based access control. It adapts to your team's workflow.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: CLOSING -->
+  <div class="slide" id="slide-11">
+    <div style="height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #091622 0%, #0d2a1e 100%); padding: 30px; text-align: center;">
+      <div style="animation: fadeIn 0.8s ease;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:24px;">
+          <div style="background: #1e8c73; width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: #fff; font-family: Space Grotesk; font-weight: 700; font-size: 24px;">S</span>
+          </div>
+          <span style="font-family: Space Grotesk; font-weight: 700; font-size: 26px; color: #e8f4f8;">SalesTrackerX</span>
+        </div>
+        <div style="font-family: Space Grotesk; font-size: 22px; font-weight: 700; color: #e8f4f8; margin-bottom: 12px;">Your Sales Team Deserves Better Visibility</div>
+        <div style="color: #6a8fa8; font-size: 13px; max-width: 420px; margin: 0 auto 28px; line-height: 1.7;">A purpose-built sales management platform — designed to track every opportunity, measure every deal, and empower every team member.</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 480px; margin: 0 auto 28px;">
+          <div style="background:#122b40; border:1px solid #1e3a52; border-radius:10px; padding:14px 10px;">
+            <div style="color:#1e8c73; font-size:20px; font-weight:700; font-family:Space Grotesk;">255+</div>
+            <div style="color:#6a8fa8; font-size:10px; margin-top:3px;">Projects Tracked</div>
+          </div>
+          <div style="background:#122b40; border:1px solid #1e3a52; border-radius:10px; padding:14px 10px;">
+            <div style="color:#4a9fd4; font-size:20px; font-weight:700; font-family:Space Grotesk;">$95M+</div>
+            <div style="color:#6a8fa8; font-size:10px; margin-top:3px;">Revenue Managed</div>
+          </div>
+          <div style="background:#122b40; border:1px solid #1e3a52; border-radius:10px; padding:14px 10px;">
+            <div style="color:#e8a838; font-size:20px; font-weight:700; font-family:Space Grotesk;">Real-time</div>
+            <div style="color:#6a8fa8; font-size:10px; margin-top:3px;">Live Data</div>
+          </div>
+        </div>
+        <div style="color: #4ecdc4; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">Ready to see it live for your team?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="progress-bar-demo"><div class="progress-bar-fill" id="progressBar" style="width:8.33%;"></div></div>
+    <button class="ctrl-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>&#8592; Prev</button>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+      <div class="slide-dots" id="dots"></div>
+      <div class="slide-label" id="slideLabel">1 / 12</div>
+    </div>
+    <button class="ctrl-btn primary" id="nextBtn" onclick="changeSlide(1)">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  const total = 12;
+  const slideNames = ['Secure Login','Executive Dashboard','Pipeline Analysis','Client & Product Analytics','Team Performance','All Projects','Project Detail','Task Management','Create Project','Revenue Analytics','Settings','Overview'];
+
+  function buildDots() {
+    const dc = document.getElementById('dots');
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => goTo(i);
+      dc.appendChild(d);
+    }
+  }
+
+  function goTo(n) {
+    document.getElementById('slide-' + current).classList.remove('active');
+    document.querySelectorAll('.slide-dot')[current].classList.remove('active');
+    current = n;
+    document.getElementById('slide-' + current).classList.add('active');
+    document.querySelectorAll('.slide-dot')[current].classList.add('active');
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === total - 1;
+    document.getElementById('nextBtn').textContent = current === total - 1 ? 'Finish' : 'Next →';
+    document.getElementById('slideLabel').textContent = (current + 1) + ' / ' + total + '  ·  ' + slideNames[current];
+    document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) { if (current + dir >= 0 && current + dir < total) goTo(current + dir); }
+
+  buildDots();
+  document.getElementById('slideLabel').textContent = '1 / 12  ·  ' + slideNames[0];
+</script>
